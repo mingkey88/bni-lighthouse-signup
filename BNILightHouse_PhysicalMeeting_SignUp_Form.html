@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BNI Lighthouse — Visit a Meeting</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bni-red: #CC0A2F;
+    --bni-red-dark: #A00825;
+    --bni-gold: #D4A843;
+    --white: #FFFFFF;
+    --bg: #F5F7FA;
+    --grey-100: #F3F4F6;
+    --grey-200: #E5E7EB;
+    --grey-300: #D1D5DB;
+    --grey-400: #9CA3AF;
+    --grey-500: #6B7280;
+    --grey-700: #374151;
+    --grey-900: #111827;
+    --charcoal: #1A1A2E;
+    --charcoal-mid: #252540;
+    --focus-shadow: rgba(204, 10, 47, 0.12);
+    --success: #10B981;
+  }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--grey-900);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+
+  /* ===== MAIN CONTAINER ===== */
+  .container {
+    width: 100%;
+    max-width: 960px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+  }
+
+  @media (max-width: 820px) {
+    .container {
+      grid-template-columns: 1fr;
+      max-width: 520px;
+    }
+  }
+
+  /* ===== LEFT PANEL — EDM ===== */
+  .edm-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bni-red);
+    padding: 32px 28px;
+    gap: 24px;
+  }
+
+  .edm-header {
+    text-align: center;
+  }
+  .edm-header-logo {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .edm-header-tagline {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.5px;
+  }
+
+  .edm-panel img {
+    width: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 8px;
+    border: 4px solid var(--white);
+  }
+
+  .edm-stats {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+  }
+  .edm-stat {
+    text-align: center;
+    flex: 1;
+  }
+  .edm-stat-number {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.2;
+  }
+  .edm-stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+  }
+
+  @media (max-width: 820px) {
+    .edm-panel { padding: 24px 16px; gap: 16px; }
+    .edm-panel img { max-height: 520px; }
+    .edm-stat-number { font-size: 20px; }
+  }
+
+  /* ===== RIGHT PANEL — FORM ===== */
+  .form-panel {
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--grey-900);
+    margin-bottom: 4px;
+  }
+  .form-subtitle {
+    font-size: 14px;
+    color: var(--grey-500);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  .field-group { margin-bottom: 18px; }
+
+  .field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--grey-700);
+    margin-bottom: 6px;
+  }
+  .field-label .req {
+    color: var(--bni-red);
+    margin-left: 2px;
+  }
+
+  .field-input,
+  .field-select {
+    width: 100%;
+    background: var(--white);
+    border: 1px solid var(--grey-300);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--grey-900);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  .field-input::placeholder { color: var(--grey-400); }
+  .field-input:focus,
+  .field-select:focus {
+    border-color: var(--bni-red);
+    box-shadow: 0 0 0 3px var(--focus-shadow);
+  }
+
+  .field-select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239CA3AF' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 6l3.5 4 3.5-4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 480px) {
+    .field-row { grid-template-columns: 1fr; }
+  }
+
+  /* Meeting badge */
+  .meeting-badge {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .meeting-badge.physical {
+    display: inline-flex;
+    background: rgba(204,10,47,0.06);
+    border: 1px solid rgba(204,10,47,0.12);
+    color: var(--bni-red);
+  }
+  .meeting-badge.zoom {
+    display: inline-flex;
+    background: rgba(59,130,246,0.06);
+    border: 1px solid rgba(59,130,246,0.12);
+    color: #2563EB;
+  }
+  .meeting-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  .meeting-badge.physical .dot { background: var(--bni-red); }
+  .meeting-badge.zoom .dot { background: #3B82F6; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  .divider {
+    height: 1px;
+    background: var(--grey-200);
+    margin: 22px 0;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--bni-red);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  }
+  .submit-btn:hover {
+    background: var(--bni-red-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(204,10,47,0.25);
+  }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .form-footer {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--grey-400);
+    line-height: 1.6;
+  }
+  .form-footer a {
+    color: var(--bni-red);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* Success overlay */
+  .success-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(6px);
+    border-radius: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 32px;
+    z-index: 10;
+    animation: fadeIn 0.35s ease;
+  }
+  .success-overlay.show { display: flex; }
+
+  .success-icon {
+    width: 56px; height: 56px;
+    background: rgba(16,185,129,0.1);
+    border: 2px solid rgba(16,185,129,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    animation: scaleIn 0.35s ease 0.1s both;
+  }
+  .success-icon svg { color: var(--success); }
+
+  .success-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--grey-900);
+    margin-bottom: 8px;
+    animation: slideUp 0.35s ease 0.2s both;
+  }
+  .success-msg {
+    font-size: 14px;
+    color: var(--grey-500);
+    line-height: 1.6;
+    animation: slideUp 0.35s ease 0.3s both;
+  }
+
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  @keyframes scaleIn { from{transform:scale(.5);opacity:0} to{transform:scale(1);opacity:1} }
+  @keyframes slideUp { from{transform:translateY(10px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+  @media (max-width: 820px) {
+    .form-panel { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ===== LEFT: EDM POSTER ===== -->
+  <div class="edm-panel">
+    <div class="edm-header">
+      <div class="edm-header-tagline">Stronger Together, Brighter Forever!</div>
+    </div>
+
+    <img src="edm-poster.png" alt="BNI Lighthouse — Illuminate & Connect">
+
+    <div class="edm-stats">
+      <div class="edm-stat">
+        <div class="edm-stat-number">35+</div>
+        <div class="edm-stat-label">Active Members</div>
+      </div>
+      <div class="edm-stat">
+        <div class="edm-stat-number">100+</div>
+        <div class="edm-stat-label">Referrals Given</div>
+      </div>
+      <div class="edm-stat">
+        <div class="edm-stat-number">$2M+</div>
+        <div class="edm-stat-label">Business Generated</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RIGHT: FORM ===== -->
+  <div class="form-panel">
+    <div class="success-overlay" id="successOverlay">
+      <div class="success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="success-title">You're Registered!</div>
+      <div class="success-msg">
+        We'll send you the meeting details via WhatsApp.<br>
+        See you at BNI Lighthouse!
+      </div>
+    </div>
+
+    <div class="form-title">Register as a Visitor</div>
+    <div class="form-subtitle">Fill in your details and we'll reach out via WhatsApp.</div>
+
+    <form id="regForm" onsubmit="handleSubmit(event)">
+      <div class="field-group">
+        <label class="field-label">Full Name <span class="req">*</span></label>
+        <input class="field-input" type="text" placeholder="e.g. John Tan" required>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Email <span class="req">*</span></label>
+        <input class="field-input" type="email" placeholder="john@example.com" required>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Contact Number <span class="req">*</span></label>
+        <input class="field-input" type="tel" placeholder="+65 9123 4567" required>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Date of Meeting <span class="req">*</span></label>
+        <select class="field-select" id="meetingDate" required onchange="updateMeetingType()">
+          <option value="" disabled selected>Select a meeting date</option>
+          <optgroup label="Physical Meetings (S$65)">
+            <option value="10 April 2026 - physical">10 April 2026 (Fri) — Physical</option>
+            <option value="8 May 2026 - physical">8 May 2026 (Fri) — Physical</option>
+            <option value="5 June 2026 - physical">5 June 2026 (Fri) — Physical</option>
+          </optgroup>
+          <optgroup label="Zoom Meetings (Free)">
+            <option value="17 April 2026 - zoom">17 April 2026 (Fri) — Zoom</option>
+            <option value="24 April 2026 - zoom">24 April 2026 (Fri) — Zoom</option>
+            <option value="15 May 2026 - zoom">15 May 2026 (Fri) — Zoom</option>
+            <option value="22 May 2026 - zoom">22 May 2026 (Fri) — Zoom</option>
+            <option value="29 May 2026 - zoom">29 May 2026 (Fri) — Zoom</option>
+            <option value="12 June 2026 - zoom">12 June 2026 (Fri) — Zoom</option>
+            <option value="19 June 2026 - zoom">19 June 2026 (Fri) — Zoom</option>
+            <option value="26 June 2026 - zoom">26 June 2026 (Fri) — Zoom</option>
+          </optgroup>
+        </select>
+        <div class="meeting-badge" id="meetingBadge">
+          <span class="dot"></span>
+          <span id="badgeText"></span>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Who Invited You? <span class="req">*</span></label>
+        <input class="field-input" type="text" placeholder="Name of BNI member who invited you" required>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Your Trade <span class="req">*</span></label>
+          <input class="field-input" type="text" placeholder="e.g. Web Design" required>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Company Role <span class="req">*</span></label>
+          <input class="field-input" type="text" placeholder="e.g. Founder" required>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Register Now</button>
+    </form>
+
+    <div class="form-footer">
+      Physical meetings at <strong>Suntec Convention Centre, Room 304</strong>.<br>
+      Questions? Reach us at <a href="https://www.instagram.com/bnilighthouse/" target="_blank">@bnilighthouse</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function updateMeetingType() {
+  const val = document.getElementById('meetingDate').value;
+  const badge = document.getElementById('meetingBadge');
+  const text = document.getElementById('badgeText');
+  badge.className = 'meeting-badge';
+  if (val.includes('physical')) {
+    badge.classList.add('physical');
+    text.textContent = 'In-Person · Suntec Convention Centre, Room 304 · S$65 Nett';
+  } else if (val.includes('zoom')) {
+    badge.classList.add('zoom');
+    text.textContent = 'Online via Zoom · Free Admission';
+  }
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+  setTimeout(() => {
+    document.getElementById('successOverlay').classList.add('show');
+  }, 800);
+}
+</script>
+
+</body>
+</html>
