@@ -340,7 +340,7 @@
       <div class="edm-header-tagline">Stronger Together, Brighter Forever!</div>
     </div>
 
-    <img src="edm-poster.png" alt="BNI Lighthouse — Illuminate & Connect">
+    <img src="edm-poster.jpg" alt="BNI Lighthouse — Illuminate & Connect">
 
     <div class="edm-stats">
       <div class="edm-stat">
@@ -377,17 +377,17 @@
     <form id="regForm" onsubmit="handleSubmit(event)">
       <div class="field-group">
         <label class="field-label">Full Name <span class="req">*</span></label>
-        <input class="field-input" type="text" placeholder="e.g. John Tan" required>
+        <input class="field-input" name="fullName" type="text" placeholder="e.g. John Tan" required>
       </div>
 
       <div class="field-group">
         <label class="field-label">Email <span class="req">*</span></label>
-        <input class="field-input" type="email" placeholder="john@example.com" required>
+        <input class="field-input" name="email" type="email" placeholder="john@example.com" required>
       </div>
 
       <div class="field-group">
         <label class="field-label">Contact Number <span class="req">*</span></label>
-        <input class="field-input" type="tel" placeholder="+65 9123 4567" required>
+        <input class="field-input" name="contactNumber" type="tel" placeholder="+65 9123 4567" required>
       </div>
 
       <div class="field-group">
@@ -418,7 +418,7 @@
 
       <div class="field-group">
         <label class="field-label">Who Invited You? <span class="req">*</span></label>
-        <input class="field-input" type="text" placeholder="Name of BNI member who invited you" required>
+        <input class="field-input" name="invitedBy" type="text" placeholder="Name of BNI member who invited you" required>
       </div>
 
       <div class="divider"></div>
@@ -426,11 +426,11 @@
       <div class="field-row">
         <div class="field-group">
           <label class="field-label">Your Trade <span class="req">*</span></label>
-          <input class="field-input" type="text" placeholder="e.g. Web Design" required>
+          <input class="field-input" name="trade" type="text" placeholder="e.g. Web Design" required>
         </div>
         <div class="field-group">
           <label class="field-label">Company Role <span class="req">*</span></label>
-          <input class="field-input" type="text" placeholder="e.g. Founder" required>
+          <input class="field-input" name="companyRole" type="text" placeholder="e.g. Founder" required>
         </div>
       </div>
 
@@ -465,9 +465,36 @@ function handleSubmit(e) {
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = 'Submitting...';
-  setTimeout(() => {
+
+  const form = document.getElementById('regForm');
+  const meetingVal = document.getElementById('meetingDate').value;
+  const parts = meetingVal.split(' - ');
+
+  const data = {
+    fullName: form.fullName.value,
+    email: form.email.value,
+    contactNumber: form.contactNumber.value,
+    meetingDate: parts[0],
+    meetingType: parts[1],
+    invitedBy: form.invitedBy.value,
+    trade: form.trade.value,
+    companyRole: form.companyRole.value
+  };
+
+  fetch('https://script.google.com/macros/s/AKfycbzmErjnbCle6NhkcTz2J8_w79g9t9likFj2YmDwwxpHxr5dIdbavlVH_KWfzY1GkmKn/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(data)
+  })
+  .then(() => {
     document.getElementById('successOverlay').classList.add('show');
-  }, 800);
+  })
+  .catch(() => {
+    alert('Something went wrong. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Register Now';
+  });
 }
 </script>
 
